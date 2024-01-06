@@ -1,12 +1,13 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useContext } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import AuthContext from '../../store/auth-context';
 
 const Login = (props) => {
   const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredcollege, setEnteredcollege] = useState('');
+  
   const [emailIsValid, setEmailIsValid] = useState();
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
@@ -25,13 +26,7 @@ const Login = (props) => {
       event.target.value.includes('@') && enteredPassword.trim().length > 6
     );
   };
-  const collegeChangeHandler = (event) => {
-    setEnteredcollege(event.target.value);
 
-    setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
-    );
-  };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
@@ -53,7 +48,7 @@ const Login = (props) => {
     event.preventDefault();
     props.onLogin(enteredEmail, enteredPassword);
   };
-
+  const authCtx = useContext(AuthContext)
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
@@ -85,20 +80,7 @@ const Login = (props) => {
             onBlur={validatePasswordHandler}
           />
         </div>
-        <div
-          className={`${classes.control} ${
-            emailIsValid === false ? classes.invalid : ''
-          }`}
-        >
-          <label htmlFor="email">College</label>
-          <input
-            type="text"
-            id="email"
-            value={enteredcollege}
-            onChange={collegeChangeHandler}
-            onBlur={validateEmailHandler}
-          />
-        </div>
+       
         <div className={classes.actions}>
           <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
